@@ -22,6 +22,12 @@ class Play extends Phaser.Scene {
   
     // Create game objects
     create() {
+      // Import sounds
+      this.bambooHit = new Audio('./assets/bambooHit.mp3');
+      this.tap = new Audio('./assets/tap.mp3');
+      this.melancholicWalk = new Audio('./assets/melancholicWalk.mp3');
+      this.melancholicWalk.loop = true;
+      this.melancholicWalk.play();
 
       // Add background
       this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0, 0);
@@ -49,14 +55,16 @@ class Play extends Phaser.Scene {
       // Add keys
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+      keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   
       // Add collision detection between panda and branches
       this.physics.add.collider(this.panda, this.branch, () => {
+        this.bambooHit.play();
         this.gameover = true;
       });
 
       this.time.addEvent({
-        delay: 1000, // in milliseconds
+        delay: game.settings.branchDelay, // in milliseconds
         callback: this.spawnBranch,
         callbackScope: this,
         loop: true
@@ -82,18 +90,20 @@ class Play extends Phaser.Scene {
     update() {
       // Panda left/right movement
       if(keyLEFT.isDown) {
+        this.tap.play();
         this.panda.x = (game.config.width / 4) + 60;
         this.panda.flipX = true;
       } else if (keyRIGHT.isDown) {
+        this.tap.play();
         this.panda.x = (game.config.width / 4) * 3 - 60;
         this.panda.flipX = false;
       }
       // Move bamboo and branches down the screen
-      this.bamboo.setVelocityY(200);
-      this.branch.setVelocityY(200);
+      this.bamboo.setVelocityY(game.settings.fallSpeed);
+      this.branch.setVelocityY(game.settings.fallSpeed);
 
       // Infinite bamboo length
-      let bambooChance = Phaser.Math.Between(1, 50);
+      let bambooChance = Phaser.Math.Between(1, game.settings.bambooChance);
       if (bambooChance === 1) {
         this.bamboo.create((game.config.width / 2) - 50, game.config.height - 1200, 'bamboo').setScale(1).setOrigin(0, 0);
       }
@@ -104,8 +114,45 @@ class Play extends Phaser.Scene {
 
     // Game over logic
     if (this.gameover) {
-      this.scene.pause();
-      this.add.text(200, 200, 'Game Over', { font: '64px Arial', fill: '#FF0000' });
-    }
-  }
+        // check key input for menu
+        if(Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.scene.start("menuScene");
+        }
+
+        // Add a pop-up screen
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0x000000, 0.5);
+        graphics.fillRect(0, 0, this.game.config.width, this.game.config.height);
+
+        // Add text to the pop-up screen
+        const gameOverText = this.add.text(
+        this.game.config.width / 2,
+        this.game.config.height / 2,
+        'Game Over',
+        {
+            font: '64px Arial',
+            fill: '#FF0000',
+            align: 'center'
+        }
+        );
+        gameOverText.setOrigin(0.5);
+
+        // Add a button to restart the game
+        const restartButton = this.add.text(
+        this.game.config.width / 2,
+        this.game.config.height / 2 + 100,
+        'Menu (M)',
+        {
+            font: '32px Arial',
+            fill: '#FFFFFF',
+            backgroundColor: '#000000',
+            padding: {
+            x: 20,
+            y: 10
+            }
+        }
+        );
+        restartButton.setOrigin(0.5);
+    };
+}
 }

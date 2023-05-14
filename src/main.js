@@ -9,7 +9,7 @@ let config = {
         debug: false
       }
     },
-    scene: [ Menu, Play ]
+    scene: [ Menu, Credits, Play ]
   };
 
 let game = new Phaser.Game(config);
@@ -19,4 +19,4 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 // reserve keyboard vars
-let keyF, keyR, keyLEFT, keyRIGHT;
+let keyM, keyC, keyB, keyLEFT, keyRIGHT;
