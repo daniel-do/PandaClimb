@@ -68,6 +68,13 @@ class Play extends Phaser.Scene {
         callbackScope: this,
         loop: true
       });
+
+      this.time.addEvent({
+        delay: game.settings.branchDelay * 100, // in milliseconds
+        callback: this.spawnBamboo,
+        callbackScope: this,
+        loop: true
+      });
     }
 
     spawnBranch() {
@@ -83,6 +90,11 @@ class Play extends Phaser.Scene {
             }
             this.branch.create(branchX, -32, 'branch');
         }
+    }
+
+    spawnBamboo() {
+        // Infinite bamboo length
+        this.bamboo.create((game.config.width / 2) - 50, game.config.height - 1200, 'bamboo').setScale(1).setOrigin(0, 0);
     }
   
     // Update game logic
@@ -100,12 +112,6 @@ class Play extends Phaser.Scene {
       // Move bamboo and branches down the screen
       this.bamboo.setVelocityY(game.settings.fallSpeed);
       this.branch.setVelocityY(game.settings.fallSpeed);
-
-      // Infinite bamboo length
-      let bambooChance = Phaser.Math.Between(1, game.settings.bambooChance);
-      if (bambooChance === 1) {
-        this.bamboo.create((game.config.width / 2) - 50, game.config.height - 1200, 'bamboo').setScale(1).setOrigin(0, 0);
-      }
 
       this.background.tilePositionY -= 4;
 

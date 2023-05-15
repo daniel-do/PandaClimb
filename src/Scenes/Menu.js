@@ -49,8 +49,7 @@ class Menu extends Phaser.Scene {
           // Normal mode
           game.settings = {
             fallSpeed: 200,
-            branchDelay: 1000,
-            bambooChance: 50,    
+            branchDelay: 1000,   
           }
           //this.sound.play('sfx_select');
           this.scene.start("playScene");    
@@ -60,7 +59,6 @@ class Menu extends Phaser.Scene {
           game.settings = {
             fallSpeed: 400,
             branchDelay: 500,
-            bambooChance: 10,  
           }
           //this.sound.play('sfx_select');
           this.scene.start("playScene");    
