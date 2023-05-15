@@ -10,6 +10,7 @@ Jenky way of making it feel like the bamboo has an infinite length
 Flipped panda sprite along the center of the canvas (calculating equal fractions of the canvas)
 Learned how to use Aesprite to make the art for the panda, bamboo, and its branches
 Unintentional paralax between the main bamboo sprite and the scrolling bamboo background
+Rainbow panda animation after reaching a score of 100
 */
 
 let config = {
