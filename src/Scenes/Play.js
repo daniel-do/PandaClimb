@@ -15,7 +15,7 @@ class Play extends Phaser.Scene {
       this.load.image('bamboo', './assets/bamboo.jpg');
       this.load.image('branch', './assets/branch.png');
       this.load.image('background', './assets/background.jpeg');
-      this.load.spritesheet('panda', './assets/panda.png', { frameWidth: 269, frameHeight: 244 });
+      this.load.spritesheet('panda', './assets/panda.png', { frameWidth: 244, frameHeight: 269, startFrame: 0, endFrame: 6});
       this.load.audio("melancholicWalk", "./assets/melancholicWalk.mp3");
     }
   
@@ -55,6 +55,17 @@ class Play extends Phaser.Scene {
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
       keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+      // animation config
+      this.anims.create({
+        key: 'rainbowPanda',
+        frames: this.anims.generateFrameNumbers('panda', { 
+            start: 0, 
+            end: 6, 
+            first: 0
+        }),
+        frameRate: 10
+      });
   
       // Add collision detection between panda and branches
       this.physics.add.collider(this.panda, this.branch, () => {
@@ -70,7 +81,7 @@ class Play extends Phaser.Scene {
       });
 
       this.time.addEvent({
-        delay: game.settings.branchDelay * 100, // in milliseconds
+        delay: game.settings.branchDelay * 3, // in milliseconds
         callback: this.spawnBamboo,
         callbackScope: this,
         loop: true
@@ -116,6 +127,10 @@ class Play extends Phaser.Scene {
       this.background.tilePositionY -= 4;
 
       score = Math.floor(this.time.now * 0.001);
+
+      if (score >= 100) {
+        this.panda.anims.play('rainbowPanda', true);
+      }
   
       this.scoreText.setText('Score: ' + score);
 
