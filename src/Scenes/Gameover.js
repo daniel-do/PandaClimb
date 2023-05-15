@@ -52,19 +52,6 @@ class Gameover extends Phaser.Scene {
         );
         restartButton.setOrigin(0.5);
 
-        // menu text configuration
-        let menuConfig = {
-            fontFamily: 'Brush Script MT',
-            fontSize: '50px',
-            color: '#0000FF',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 0
-        }
-
         // define keys
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     }
