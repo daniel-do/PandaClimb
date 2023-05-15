@@ -23,10 +23,14 @@ let config = {
         debug: false
       }
     },
-    scene: [ Menu, Credits, Play ]
+    scene: [ Menu, Credits, Play, Gameover ]
   };
 
 let game = new Phaser.Game(config);
+
+let score = 0;
+
+let gameover = false;
 
 // set UI sizes
 let borderUISize = game.config.height / 15;

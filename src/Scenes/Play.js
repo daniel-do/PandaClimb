@@ -4,13 +4,11 @@ class Play extends Phaser.Scene {
     }
   
     // Initialize game variables
-    score = 0;
     scoreText;
     bamboo;
     branch;
     panda;
     gameover = false;
-    moveSpeed = 2;
   
     // Load game assets
     preload() {
@@ -18,6 +16,7 @@ class Play extends Phaser.Scene {
       this.load.image('branch', './assets/branch.png');
       this.load.image('background', './assets/background.jpeg');
       this.load.spritesheet('panda', './assets/panda.png', { frameWidth: 269, frameHeight: 244 });
+      this.load.audio("melancholicWalk", "./assets/melancholicWalk.mp3");
     }
   
     // Create game objects
@@ -25,7 +24,7 @@ class Play extends Phaser.Scene {
       // Import sounds
       this.bambooHit = new Audio('./assets/bambooHit.mp3');
       this.tap = new Audio('./assets/tap.mp3');
-      this.melancholicWalk = new Audio('./assets/melancholicWalk.mp3');
+      this.melancholicWalk = this.sound.add("melancholicWalk");
       this.melancholicWalk.loop = true;
       this.melancholicWalk.play();
 
@@ -109,50 +108,15 @@ class Play extends Phaser.Scene {
       }
 
       this.background.tilePositionY -= 4;
+
+      score = Math.floor(this.time.now * 0.001);
   
-      this.scoreText.setText('Score: ' + Math.floor(this.time.now * 0.001));
+      this.scoreText.setText('Score: ' + score);
 
-    // Game over logic
-    if (this.gameover) {
-        // check key input for menu
-        if(Phaser.Input.Keyboard.JustDown(keyM)) {
-            this.scene.start("menuScene");
-        }
-
-        // Add a pop-up screen
-        const graphics = this.add.graphics();
-        graphics.fillStyle(0x000000, 0.5);
-        graphics.fillRect(0, 0, this.game.config.width, this.game.config.height);
-
-        // Add text to the pop-up screen
-        const gameOverText = this.add.text(
-        this.game.config.width / 2,
-        this.game.config.height / 2,
-        'Game Over',
-        {
-            font: '64px Arial',
-            fill: '#FF0000',
-            align: 'center'
-        }
-        );
-        gameOverText.setOrigin(0.5);
-
-        // Add a button to restart the game
-        const restartButton = this.add.text(
-        this.game.config.width / 2,
-        this.game.config.height / 2 + 100,
-        'Menu (M)',
-        {
-            font: '32px Arial',
-            fill: '#FFFFFF',
-            backgroundColor: '#000000',
-            padding: {
-            x: 20,
-            y: 10
-            }
-        }
-        );
-        restartButton.setOrigin(0.5);
-    };
-}
+      // Game over logic
+      if (this.gameover) {
+        this.melancholicWalk.stop();
+        this.scene.start("gameoverScene");
+      }
+  }
 }
