@@ -8,7 +8,6 @@ class Play extends Phaser.Scene {
     bamboo;
     branch;
     panda;
-    gameover = false;
   
     // Load game assets
     preload() {
@@ -21,12 +20,19 @@ class Play extends Phaser.Scene {
   
     // Create game objects
     create() {
+      gameover = false;
+      score = 0;
+      this.bambooDelay = game.settings.branchDelay * 3;
+
       // Import sounds
       this.bambooHit = new Audio('./assets/bambooHit.mp3');
       this.tap = new Audio('./assets/tap.mp3');
+      this.powerup = new Audio('./assets/powerup.mp3');
       this.melancholicWalk = this.sound.add("melancholicWalk");
       this.melancholicWalk.loop = true;
       this.melancholicWalk.play();
+      this.score = 0;
+      this.clock = 0;
 
       // Add background
       this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0, 0);
@@ -70,7 +76,7 @@ class Play extends Phaser.Scene {
       // Add collision detection between panda and branches
       this.physics.add.collider(this.panda, this.branch, () => {
         this.bambooHit.play();
-        this.gameover = true;
+        gameover = true;
       });
 
       this.time.addEvent({
@@ -81,7 +87,7 @@ class Play extends Phaser.Scene {
       });
 
       this.time.addEvent({
-        delay: game.settings.branchDelay * 3, // in milliseconds
+        delay: this.bambooDelay, // in milliseconds
         callback: this.spawnBamboo,
         callbackScope: this,
         loop: true
@@ -124,18 +130,26 @@ class Play extends Phaser.Scene {
       this.bamboo.setVelocityY(game.settings.fallSpeed);
       this.branch.setVelocityY(game.settings.fallSpeed);
 
+      if (((score % 1000) == 0) && (score != 0)) {
+        this.powerup.play();
+        game.settings.fallSpeed += 50;
+        this.bambooDelay -= game.settings.branchDelay;
+        this.bamboo.setVelocityY(game.settings.fallSpeed);
+        this.branch.setVelocityY(game.settings.fallSpeed);
+      }
+
       this.background.tilePositionY -= 4;
 
-      score = Math.floor(this.time.now * 0.001);
+      score++;
 
-      if (score >= 100) {
+      if (score >= 1000) {
         this.panda.anims.play('rainbowPanda', true);
       }
   
       this.scoreText.setText('Score: ' + score);
 
       // Game over logic
-      if (this.gameover) {
+      if (gameover) {
         this.melancholicWalk.stop();
         this.scene.start("gameoverScene");
       }

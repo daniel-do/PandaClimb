@@ -24,9 +24,9 @@ class Gameover extends Phaser.Scene {
 
         // Add score to the pop-up screen
         const scoreTextFinal = this.add.text(
-            this.game.config.width / 2 - 50,
-            (this.game.config.height / 2),
-            'Score: ' + score,
+            this.game.config.width / 2 - 40,
+            (this.game.config.height / 2 - 40),
+            'Score:\n' + score,
             {
                 font: '32px Arial',
                 fill: '#FFFF00',

@@ -1,7 +1,7 @@
 /*
 Daniel Do
 "Panda Climb"
-~38 hours
+~42 hours
 
 Creative tilt justification:
 50/50 chance of spawning a bamboo branch every second

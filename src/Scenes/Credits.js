@@ -30,6 +30,7 @@ class Credits extends Phaser.Scene {
         this.add.text(game.config.width/2 + 43, game.config.height/2 - 20, '"Bamboo Hit" SoundLibrary', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2 + 25, game.config.height/2 + 10, '"Bamboo Background" DDRKIRB', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2 - 20, game.config.height/2 + 40, '"Minimalism Bamboo" Rare-gallery', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2 + 15, game.config.height/2 + 70, '"Powerup SFX" Creator Assets', menuConfig).setOrigin(0.5);
         menuConfig.color = '#000000';
         this.add.text(game.config.width/2 + 113, game.config.height/2 + borderUISize + borderPadding + 120, 'Press B to return', menuConfig).setOrigin(0.5);
 
